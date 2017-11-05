@@ -1,15 +1,11 @@
-var heroes = [
-	{id:1, name:"roy"},
-	{id:2, name:"x"},
-	{id:3, name:"b"}
-];
-
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+
+var heroes = require('./heroes.js');
 
 app.route('/heroes')
 	.get(function (req, res) {
@@ -24,7 +20,7 @@ app.route('/heroes')
 
 	.delete(function (req, res) {
 		for (var i=-0; i<heroes.length; i++) {
-			if(heroes[i].name == req.query['name']) {
+			if(heroes[i].name.contains(req.query['name'])) {
 				heroes.splice(i, 1);
 			}
 		}
@@ -39,7 +35,7 @@ app.route('/heroes/:id')
 	.put(function (req, res) {
 		for (var i=0; i<heroes.length; i++) {
 			if (heroes[i].id === req.params.id-1) {
-				heroes[i].name = "check"; //heroes[i].name = req.params.name;
+				heroes[i].name = req.query['name'];
 				break;
 			}
 		}
@@ -54,7 +50,6 @@ app.route('/heroes/:id')
 		}
 		res.send(heroes)
 	});
-
 
 http.listen(3000, function(){
 	console.log('listening on *:3000');
