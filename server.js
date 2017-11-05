@@ -9,7 +9,7 @@ var heroes = require('./heroes.js');
 
 app.route('/heroes')
 	.get(function (req, res) {
-		res.send(heroes)
+		res.send(heroes);
 	})
 
 	.post(function (req, res) {
