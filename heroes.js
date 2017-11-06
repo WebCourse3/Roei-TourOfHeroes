@@ -3,5 +3,4 @@ var heroes = [
 	{id:2, name:"x"},
 	{id:3, name:"b"}
 ];
-
 module.exports = heroes;
