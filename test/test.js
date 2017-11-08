@@ -32,6 +32,23 @@ describe('Heroes', function () {
 					});
 		});
 
+		it('should update a SINGLE hero on /heroes PUT', function (done) {
+			chai.request(server)
+				.get('/heroes')
+				.end(function (err, res) {
+					var oldLen = res.body.length;
+					chai.request(server)
+						.put('/heroes/' + res.body[0].id)
+						.end(function (error, response) {
+							response.should.have.status(200);
+							response.should.be.json;
+							var newLen = response.body.length;
+							newLen.should.equal(oldLen);
+							done();
+						});
+				});
+		});
+
 		it('should add a SINGLE hero on /heroes POST', function (done) {
 			chai.request(server)
 				.post('/heroes')
@@ -59,6 +76,23 @@ describe('Heroes', function () {
 							response.should.have.status(200);
 							response.should.be.json;
 							var newLen = response.body.length + 1; // Adding 1 to the new length to check if it's actually deleted
+							newLen.should.equal(oldLen);
+							done();
+						});
+				});
+		});
+
+		it('should delete a SINGLE hero on /heroes DELETE using name', function (done) {
+			chai.request(server)
+				.get('/heroes')
+				.end(function (err, res) {
+					var oldLen = res.body.length - 1;
+					chai.request(server)
+						.delete('/heroes/' + res.body[0].name)
+						.end(function (error, response) {
+							response.should.have.status(200);
+							response.should.be.json;
+							var newLen = response.body.length - 1;
 							newLen.should.equal(oldLen);
 							done();
 						});
